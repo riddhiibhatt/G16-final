@@ -1,0 +1,127 @@
+/* style2.css */
+
+@font-face {
+    font-family: 'MIGRA';
+    src: url('Project/migra-extralight-webfont.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'MIGRA', Arial, sans-serif; 
+    background: linear-gradient(90deg, #8c52ff, #ff914d);
+    display: flex;
+}
+
+.split-layout {
+    display: flex;
+    height: 100%;
+}
+
+.left-partition {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    color: #f3b8ab;
+    font-size: 50%;
+}
+
+.logo {
+    width: 120px;
+    height: auto;
+    margin-bottom: 10px; 
+}
+.center-container {
+    display: flex;
+    font-size: 30.0px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    margin-bottom: 20px;
+}
+
+.center-left {
+    text-align: center;
+    padding: 20px;
+}
+
+.center-text{
+    text-align: center;
+    display: block;
+}
+.center-text button{
+    display: block;
+    margin: 0 auto;
+}
+
+#recordButton,
+#stopButton {
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#recordButton.recording {
+    background-color: #D32F2F;
+}
+
+#stopButton {
+    background-color: #D32F2F;
+    margin-left: 10px;
+}
+.right-partition {
+    flex: 1;
+    font-size: 175%;
+    position: relative;
+    text-align: center;
+    color: #3b3b4e !important; /* Updated text color */
+    overflow: hidden;
+    font-weight: bold;
+}
+
+.right-partition .watermark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.5;
+}
+
+.right-partition p {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    text-align: center;
+    max-width: 80%;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+label {
+    cursor: pointer;
+}
+
+.upload-icon {
+    width: 204px;
+    height: auto;
+    border: 2px solid #fff;
+    border-radius: 8px;
+    padding: 10px;
+    box-sizing: border-box;
+}

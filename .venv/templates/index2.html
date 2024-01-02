@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Website</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style2.css') }}">
+</head>
+<body class="background-90">
+    <div class="left-partition">
+        <div class="top-left">
+            <img src="{{ url_for('static', filename='images/LOGO_bg.png') }}" alt="Your Logo" class="logo">
+        </div>
+        <div class="left-partition">
+            <div class="center-left">
+                <div class="center-container">
+                    <h2>Record your audio</h2>
+                    <button id="recordButton">Start Recording</button>
+                    <button id="stopButton" style="display: none;" disabled>Stop Recording</button>
+                    <audio id="audioPlayer" controls></audio>
+                </div>
+                <div class="center-text">
+                    <textarea id="userInput" placeholder="Type your text here..."></textarea>
+                    <button id="submitButton">Submit</button>
+                </div>
+            </div>
+        </div>    
+    </div>
+    
+    <div class="right-partition">
+        <img src="{{ url_for('static', filename='images/Watermark.png') }}" alt="Watermark" class="watermark">
+        <p>Unlock the magic with just one click...<br>Your transformed results are just a heartbeat away!</p>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const recordButton = document.getElementById('recordButton');
+            const stopButton = document.getElementById('stopButton');
+            const audioPlayer = document.getElementById('audioPlayer');
+            const userInput = document.getElementById('userInput');
+            const submitButton = document.getElementById('submitButton');
+            let mediaRecorder;
+            let audioChunks;
+
+            recordButton.addEventListener('click', startRecording);
+            stopButton.addEventListener('click', stopRecording);
+            submitButton.addEventListener('click', processAndSubmit);
+
+            function startRecording() {
+                navigator.mediaDevices.getUserMedia({ audio: true })
+                    .then(function (stream) {
+                        mediaRecorder = new MediaRecorder(stream);
+                        audioChunks = [];
+
+                        mediaRecorder.ondataavailable = function (e) {
+                            if (e.data.size > 0) {
+                                audioChunks.push(e.data);
+                            }
+                        };
+
+                        mediaRecorder.onstop = function () {
+                            // Auto-submit both audio and text when recording stops
+                            processAndSubmit();
+                        };
+
+                        mediaRecorder.start();
+
+                        recordButton.style.display = 'none';
+                        stopButton.style.display = 'inline-block';
+                        recordButton.disabled = true;
+                        stopButton.disabled = false;
+                    })
+                    .catch(function (err) {
+                        console.error('Error accessing microphone:', err);
+                    });
+            }
+
+            function stopRecording() {
+                if (mediaRecorder && mediaRecorder.state === 'recording') {
+                    mediaRecorder.stop();
+
+                    recordButton.style.display = 'inline-block';
+                    stopButton.style.display = 'none';
+                    recordButton.disabled = false;
+                    stopButton.disabled = true;
+                }
+            }
+
+            function processAndSubmit() {
+                // Check if audioChunks is defined and has data
+                if (audioChunks && audioChunks.length > 0) {
+                    // Process and submit audio
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
+                    const audioFormData = new FormData();
+                    audioFormData.append('audio', audioBlob);
+
+                    axios.post('/upload_audio', audioFormData)
+                        .then(response => {
+                            console.log('Audio saved with filename:', response.data);
+                        })
+                        .catch(error => {
+                            console.error('Error uploading audio:', error);
+                        });
+                }
+
+                if (userInput.value.trim() !== '') {
+                    // Process and submit text
+                    const textFormData = new FormData();
+                    textFormData.append('text', userInput.value);
+
+                    axios.post('/upload_text', textFormData)
+                        .then(response => {
+                            console.log('Text saved with filename:', response.data);
+                        })
+                        .catch(error => {
+                            console.error('Error uploading text:', error);
+                        });
+                }
+            }
+        });
+    </script>
+</body>
+</html>

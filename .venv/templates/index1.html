@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style1.css') }}">
+    <title>Your Title Here</title>
+</head>
+<body>
+
+    <div class="split-layout">
+        <div class="left-partition">
+            <div class="image-container">
+                <img src="{{ url_for('static', filename='images/LOGO_bg.png') }}" alt="Your Logo" class="logo">
+                <img src="{{ url_for('static', filename='images/Deaf_SL.jpg') }}" alt="Watermark" class="watermark">
+                <div class="overlay-content">
+                    <h2 class="help-text">WE ARE HERE<br>TO HELP YOU</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="right-partition">
+            <div class="content">
+                <h1 class="info">Transform the power of sound<br>into the beauty of sign language<br>with our innovative audio-to-sign conversion technology.</h1>
+                <button type="button" onclick="redirectToPage2()">Convert Now</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function redirectToPage2() {
+            window.location.href = "{{ url_for('index2') }}";
+        }
+    </script>
+
+</body>
+</html>
